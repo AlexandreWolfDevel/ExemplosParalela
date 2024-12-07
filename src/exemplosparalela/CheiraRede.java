@@ -11,19 +11,27 @@ public class CheiraRede {
         try {
             int porta = 8000;
 
-            byte[] buffer = new byte[1024];
-
-            String enderecoBroadcast = "255.255.255.255";
-            InetAddress address = InetAddress.getByName(enderecoBroadcast);
+            byte[] buffer = new byte[10024];
 
             DatagramSocket socket = new DatagramSocket(porta);
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            socket.receive(packet);
+            while (true) {
+                socket.receive(packet);
 
-            InetAddress client = packet.getAddress();
-            int clientPort = packet.getPort();
-            System.out.println("Recebido " + new String(buffer) + " do cliente " + client);
+                InetAddress client = packet.getAddress();
+                int clientPort = packet.getPort();
 
+                String mensagemRecebida = new String(buffer, 0, packet.getLength());
+
+                System.out.println("Recebido " + mensagemRecebida + " do cliente " + client);
+
+                String resposta = "eu consegui chegar até você";
+                byte byteResposta[] = resposta.getBytes();
+                
+               
+                DatagramPacket packetNovo = new DatagramPacket(byteResposta, byteResposta.length, packet.getAddress(), packet.getPort());
+                socket.send(packetNovo);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

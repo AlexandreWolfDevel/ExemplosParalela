@@ -10,17 +10,32 @@ public class SujaRede {
         try {
             int porta = 8000;
 
-            DatagramSocket socket = new DatagramSocket();
-            InetAddress address = InetAddress.getByName("255.255.255.255");
-            socket.setBroadcast(true);
+            DatagramSocket socket = new DatagramSocket();// ansy codes
+            InetAddress address = InetAddress.getByName("177.44.248.13");
+            //socket.setBroadcast(true);
 
             while (true) {
-                String mensagem = "A vaca morreu";
+
+                String mensagem = new String("ola tudo bem");
                 byte[] buffer = mensagem.getBytes();
 
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, porta);
                 socket.send(packet);
 
+                socket.receive(packet);
+                
+                byte novoBuffer[] = new byte[1000];
+                String mensagemRecebida = new String(novoBuffer, 0, packet.getLength());
+                System.out.println("Recebido do servidor" + mensagemRecebida);
+
+                for (int i = 0; i < mensagemRecebida.length(); i++) {
+                    System.out.println((char)mensagemRecebida.charAt(i) + " " + (int)mensagemRecebida.charAt(i));
+                }
+                
+                if(mensagemRecebida.equals("eu consegui chegar até você")){
+                    System.out.println("UIPI");
+                }
+                
                 Thread.sleep(1000);
             }
 
